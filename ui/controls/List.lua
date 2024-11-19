@@ -1,5 +1,6 @@
 local UserInput = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
+local utils = import("ui/utils")
 
 local List = {}
 local ListButton = {}
@@ -64,12 +65,13 @@ function ListButton.new(instance, list)
             end
         end
     end)
-
-    instance.MouseButton2Click:Connect(function()
+    function mb2c()
         if not ctrlHeld and listButton.RightCallback then
             listButton.RightCallback()
         end
-    end)
+    end
+    instance.MouseButton2Click:Connect(mb2c)
+    utils.MobileRightClickStub(instance,mb2c)
 
     listButton.List = list
     listButton.Instance = instance
@@ -117,6 +119,7 @@ function List.bindContextMenu(list, contextMenu)
 
         list.Instance.ChildAdded:Connect(function(instance)
             instance.MouseButton2Click:Connect(showContextMenu)
+            utils.MobileRightClickStub(instance,showContextMenu)
         end)
 
         list.BoundContextMenu = contextMenu
@@ -133,6 +136,7 @@ function List.bindContextMenuSelected(list, contextMenu)
 
         list.Instance.ChildAdded:Connect(function(instance)
             instance.MouseButton2Click:Connect(showContextMenu)
+            utils.MobileRightClickStub(instance,showContextMenu)
         end)
 
         list.BoundContextMenuSelected = contextMenu

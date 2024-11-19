@@ -1,5 +1,6 @@
 local RunService = game:GetService("RunService")
 local TextService = game:GetService("TextService")
+local utils = import("ui/utils")
 
 local UpvalueScanner = {}
 local ClosureSpy = import("modules/ClosureSpy")
@@ -106,14 +107,15 @@ local function addElement(upvalueLog, upvalue, index, value, temporary)
     elementLog.Index.Icon.Image = oh.Constants.Types[elementIndexType]
     elementLog.Value.Label.TextColor3 = oh.Constants.Syntax[elementValueType]
     elementLog.Value.Icon.Image = oh.Constants.Types[elementValueType]
-
-    elementLog.MouseButton2Click:Connect(function()
+    function mb2c()
         selectedUpvalue = upvalue
         selectedUpvalueLog = upvalueLog
         selectedElement = index
         elementTypeDropdown:SetSelected(typeof(value))
         elementContextMenu:Show()
-    end)
+    end
+    elementLog.MouseButton2Click:Connect(mb2c)
+    utils.MobileRightClickStub(mb2c)
 
     return elementLog
 end
@@ -178,8 +180,7 @@ local function addUpvalue(upvalue, temporary)
     upvalueLog.Index.Text = index
     upvalueLog.Value.TextColor3 = oh.Constants.Syntax[valueType]
     upvalueLog.Icon.Image = oh.Constants.Types[valueType]
-
-    upvalueLog.MouseButton2Click:Connect(function()
+    function mb2c()
         selectedUpvalue = upvalue
         selectedUpvalueLog = upvalueLog
         upvalueTypeDropdown:SetSelected(typeof(upvalue.Value))
@@ -189,7 +190,9 @@ local function addUpvalue(upvalue, temporary)
         else
             upvalueContextMenu:Show()
         end
-    end)
+    end
+    upvalueLog.MouseButton2Click:Connect(mb2c)
+    utils.MobileRightClickStub(mb2c)
 
     return upvalueLog
 end
